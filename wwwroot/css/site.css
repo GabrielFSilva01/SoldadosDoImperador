@@ -1,0 +1,150 @@
+
+:root {
+    /* Cores da Armadura */
+    --ultramarine-blue: #003366; /* Azul profundo da armadura Astartes */
+    --ultramarine-dark: #002244; /* Azul muito escuro para fundo/shadows */
+    --imperial-gold: #c39a3e; /* Dourado Imperial para detalhes e textos */
+    --focus-red: #cc0000; /* Vermelho de Alerta/Foco */
+    --text-light: #f0f0f0; /* Cor do texto principal */
+}
+
+
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a {
+    color: #0077cc;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+
+
+/* Ativa o fundo principal do corpo da página */
+.theme-ultramarine {
+    background-color: var(--ultramarine-dark) !important;
+    color: var(--text-light) !important;
+    padding-top: 50px;
+}
+
+    /* Barra de Navegação */
+    .theme-ultramarine header .navbar {
+        background-color: var(--ultramarine-blue) !important;
+        border-bottom: 3px solid var(--imperial-gold) !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Links e Marca */
+    .theme-ultramarine .navbar-brand,
+    .theme-ultramarine .nav-link {
+        color: var(--imperial-gold) !important;
+        font-weight: 700;
+    }
+
+        .theme-ultramarine .nav-link:hover {
+            color: var(--focus-red) !important;
+        }
+
+    /* Container Principal */
+    .theme-ultramarine .container {
+        background-color: #1a1a1a; /* Fundo escuro para o conteúdo */
+        border: 1px solid var(--ultramarine-blue);
+        padding: 30px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    /* Títulos */
+    .theme-ultramarine h1,
+    .theme-ultramarine h3,
+    .theme-ultramarine .h1 {
+        color: var(--focus-red) !important;
+        border-bottom: 1px solid var(--imperial-gold);
+    }
+
+    /* Texto Geral e Formulários */
+    .theme-ultramarine .form-control,
+    .theme-ultramarine .form-group label,
+    .theme-ultramarine .table,
+    .theme-ultramarine .table a,
+    .theme-ultramarine .table tbody td,
+    .theme-ultramarine .text-dark {
+        color: var(--text-light) !important;
+    }
+
+    .theme-ultramarine .form-control {
+        background-color: #333 !important;
+        border-color: var(--ultramarine-blue) !important;
+    }
+
+    /* Footer */
+    .theme-ultramarine .footer {
+        background-color: var(--ultramarine-blue) !important;
+        color: var(--text-light) !important;
+        border-top: 2px solid var(--imperial-gold);
+    }
+
+
+
+
+.soldado-profile {
+    background-color: #1f2732;
+    border: 5px solid var(--imperial-gold); /* Borda dourada de autoridade */
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+}
+
+    .soldado-profile h3 {
+        color: var(--focus-red) !important;
+        border-bottom: 2px solid var(--ultramarine-blue) !important;
+    }
+
+    .soldado-profile dl.row dt {
+        color: var(--imperial-gold);
+        font-weight: 700;
+    }
+
+    .soldado-profile .list-group-item {
+        background-color: #262c35 !important;
+        border-color: #3f526b !important;
+    }
