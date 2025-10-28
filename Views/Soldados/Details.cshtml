@@ -1,11 +1,10 @@
-﻿@model SoldadosDoImperador.Models.Soldado
+@model SoldadosDoImperador.Models.Soldado
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalhes do soldado</h1>
+<h1>Detailhes do Astarte</h1>
 
 <div>
     <h4>Soldado</h4>
@@ -44,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Voltar</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

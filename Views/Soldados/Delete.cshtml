@@ -1,13 +1,12 @@
-ï»¿@model SoldadosDoImperador.Models.Soldado
+@model SoldadosDoImperador.Models.Soldado
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Deletar soldado</h1>
+<h1>Delete</h1>
 
-<h3>VocÃª quer deletar esse soldado?</h3>
+<h3>Quer Deletar esse Astarte? Fará Falta para o Império</h3>
 <div>
     <h4>Soldado</h4>
     <hr />
@@ -47,6 +46,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Voltar</a>
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

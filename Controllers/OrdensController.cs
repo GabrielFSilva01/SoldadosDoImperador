@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,17 +18,17 @@ namespace SoldadosDoImperador.Controllers
         {
             _context = context;
         }
+
+       
         private IQueryable<Ordem> ObterOrdensComRelacoes()
         {
-    
             return _context.Ordens.Include(o => o.Soldado);
         }
-
 
         // GET: Ordens
         public async Task<IActionResult> Index()
         {
-            // USA O MÉTODO REUSÁVEL
+         
             return View(await ObterOrdensComRelacoes().ToListAsync());
         }
 
@@ -40,7 +40,6 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            // USA O MÉTODO REUSÁVEL
             var ordem = await ObterOrdensComRelacoes()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -52,18 +51,19 @@ namespace SoldadosDoImperador.Controllers
             return View(ordem);
         }
 
-        // GET: Ordens/Create
+    
         public IActionResult Create()
         {
-        
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome");
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome");
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)));
             return View();
         }
 
         // POST: Ordens/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titulo,Descricao,Status,DataEmissao,PrazoFinal,SoldadoId")] Ordem ordem)
+        
+        public async Task<IActionResult> Create([Bind("Titulo,Descricao,Status,DataEmissao,PrazoFinal,SoldadoId")] Ordem ordem)
         {
             if (ModelState.IsValid)
             {
@@ -71,12 +71,15 @@ namespace SoldadosDoImperador.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            // Repopula ViewData na falha
+
+            // CORRIGIDO: Repopula os dropdowns em caso de falha
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
             return View(ordem);
         }
 
         // GET: Ordens/Edit/5
+      
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,8 +92,8 @@ namespace SoldadosDoImperador.Controllers
             {
                 return NotFound();
             }
-            // CORRIGIDO: Repopula ViewData
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
             return View(ordem);
         }
 
@@ -124,8 +127,9 @@ namespace SoldadosDoImperador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
+
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
             return View(ordem);
         }
 
@@ -137,7 +141,6 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            // USA O MÉTODO REUSÁVEL
             var ordem = await ObterOrdensComRelacoes()
                 .FirstOrDefaultAsync(m => m.Id == id);
 

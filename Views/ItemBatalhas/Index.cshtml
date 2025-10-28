@@ -1,8 +1,7 @@
-﻿@model IEnumerable<SoldadosDoImperador.Models.ItemBatalha>
+@model IEnumerable<SoldadosDoImperador.Models.ItemBatalha>
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -47,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Especificacao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Soldado.Id)
+                @Html.DisplayFor(modelItem => item.Soldado.Nome)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

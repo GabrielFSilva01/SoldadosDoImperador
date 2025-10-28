@@ -1,34 +1,86 @@
 using SoldadosDoImperador.Models;
 using Microsoft.EntityFrameworkCore;
-using SoldadosDoImperador.Data; // Adicione este using
+using SoldadosDoImperador.Data;
+using System.Globalization;
+using Microsoft.AspNetCore.Identity;
+using SoldadosDoImperador.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("Conexao");
+
+
+builder.Services.AddDbContext<ContextoWarhammer>(options =>
+    options.UseSqlServer(connectionString));
+
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+    options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() 
+    .AddEntityFrameworkStores<ContextoWarhammer>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+  
+    options.Cookie.HttpOnly = true; 
+
+    
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
+
+   
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+    
+    options.SlidingExpiration = true;
+});
+
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ContextoWarhammer>(options => // Corrija o nome do método para AddDbContext
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Conexao")));
+builder.Services.AddRazorPages();
+
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { new CultureInfo("en-US") };
+    options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseRequestLocalization();
+
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 dias. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedData.InitializeAsync(services);
+}
+
+
+
+app.Run(); 

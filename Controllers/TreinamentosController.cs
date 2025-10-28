@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,21 +19,14 @@ namespace SoldadosDoImperador.Controllers
             _context = context;
         }
 
-        
-        private IQueryable<Treinamento> ObterTreinamentosComRelacoes()
-        {
-          
-            return _context.Treinamentos.Include(t => t.Soldado);
-        }
-
         // GET: Treinamentos
         public async Task<IActionResult> Index()
         {
-         
-            return View(await ObterTreinamentosComRelacoes().ToListAsync());
+            return View(await _context.Treinamentos.ToListAsync());
         }
 
         // GET: Treinamentos/Details/5
+      
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,8 +34,9 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-           
-            var treinamento = await ObterTreinamentosComRelacoes()
+            var treinamento = await _context.Treinamentos
+                .Include(t => t.Participantes)
+                    .ThenInclude(tp => tp.Soldado) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (treinamento == null)
@@ -50,32 +44,35 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
+            // L�gica M-N para o dropdown
+            var idsParticipantes = treinamento.Participantes.Select(p => p.SoldadoId).ToList();
+            var soldadosDisponiveis = await _context.Soldados
+                .Where(s => !idsParticipantes.Contains(s.Id))
+                .OrderBy(s => s.Nome)
+                .ToListAsync();
+
+            ViewData["SoldadosDisponiveis"] = new SelectList(soldadosDisponiveis, "Id", "Nome");
+
             return View(treinamento);
         }
-
 
         // GET: Treinamentos/Create
         public IActionResult Create()
         {
-            // CORRIGIDO: Usa a chave SoldadoId (convenção) e exibe o Nome do Soldado
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome");
             return View();
         }
 
         // POST: Treinamentos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao,SoldadoId")] Treinamento treinamento)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao")] Treinamento treinamento)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(treinamento);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = treinamento.Id });
             }
-
-            // Repopula ViewData na falha
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", treinamento.SoldadoId);
             return View(treinamento);
         }
 
@@ -92,15 +89,13 @@ namespace SoldadosDoImperador.Controllers
             {
                 return NotFound();
             }
-         
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", treinamento.SoldadoId);
             return View(treinamento);
         }
 
         // POST: Treinamentos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao,SoldadoId")] Treinamento treinamento)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao")] Treinamento treinamento)
         {
             if (id != treinamento.Id)
             {
@@ -125,14 +120,13 @@ namespace SoldadosDoImperador.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = treinamento.Id });
             }
-            // Repopula ViewData na falha
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", treinamento.SoldadoId);
             return View(treinamento);
         }
 
         // GET: Treinamentos/Delete/5
+  
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,8 +134,9 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-           
-            var treinamento = await ObterTreinamentosComRelacoes()
+            var treinamento = await _context.Treinamentos
+                .Include(t => t.Participantes)
+                    .ThenInclude(tp => tp.Soldado) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (treinamento == null)
@@ -160,11 +155,58 @@ namespace SoldadosDoImperador.Controllers
             var treinamento = await _context.Treinamentos.FindAsync(id);
             if (treinamento != null)
             {
+                var participantes = _context.TreinamentosParticipantes.Where(tp => tp.TreinamentoId == id);
+                _context.TreinamentosParticipantes.RemoveRange(participantes);
+
                 _context.Treinamentos.Remove(treinamento);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdicionarParticipante(int treinamentoId, int soldadoId)
+        {
+            if (soldadoId <= 0)
+            {
+                return RedirectToAction(nameof(Details), new { id = treinamentoId });
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var jaExiste = await _context.TreinamentosParticipantes
+                .AnyAsync(tp => tp.TreinamentoId == treinamentoId && tp.SoldadoId == soldadoId);
+
+            if (!jaExiste)
+            {
+                var novoParticipante = new TreinamentoParticipante
+                {
+                    TreinamentoId = treinamentoId,
+                    SoldadoId = soldadoId
+                };
+
+                _context.TreinamentosParticipantes.Add(novoParticipante);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Details), new { id = treinamentoId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoverParticipante(int treinamentoId, int soldadoId)
+        {
+            var participante = await _context.TreinamentosParticipantes
+                .FirstOrDefaultAsync(tp => tp.TreinamentoId == treinamentoId && tp.SoldadoId == soldadoId);
+
+            if (participante != null)
+            {
+                _context.TreinamentosParticipantes.Remove(participante);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Details), new { id = treinamentoId });
         }
 
         private bool TreinamentoExists(int id)

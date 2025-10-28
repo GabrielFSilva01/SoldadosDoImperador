@@ -1,41 +1,65 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using SoldadosDoImperador.Models;
 
-namespace SoldadosDoImperador.Data 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore; 
+using SoldadosDoImperador.Areas.Identity.Data; 
+
+namespace SoldadosDoImperador.Data
 {
-    public class ContextoWarhammer : DbContext
+    
+    public class ContextoWarhammer : IdentityDbContext<ApplicationUser>
     {
-        public ContextoWarhammer(DbContextOptions<ContextoWarhammer> options) : base(options)
+       
+        public DbSet<Soldado> Soldados { get; set; }
+        public DbSet<Missao> Missoes { get; set; }
+        public DbSet<ItemBatalha> ItensBatalha { get; set; }
+        public DbSet<Ordem> Ordens { get; set; }
+        public DbSet<Treinamento> Treinamentos { get; set; }
+
+   
+        public DbSet<MissaoParticipante> MissoesParticipantes { get; set; }
+        public DbSet<TreinamentoParticipante> TreinamentosParticipantes { get; set; }
+
+        public ContextoWarhammer(DbContextOptions<ContextoWarhammer> options)
+            : base(options)
         {
         }
 
-       
-        public DbSet<Soldado> Soldados { get; set; } = null!;
-        public DbSet<Ordem> Ordens { get; set; } = null!;
-        public DbSet<ItemBatalha> ItensBatalha { get; set; } = null!; //
-        public DbSet<Treinamento> Treinamentos { get; set; } = null!;
-        public DbSet<Missao> Missoes { get; set; } = null!;
-
-       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        
-            modelBuilder.Entity<Soldado>()
-                .Property(s => s.Altura)
-                .HasPrecision(6, 3);
+           
+            base.OnModelCreating(modelBuilder); 
 
-            modelBuilder.Entity<Soldado>()
-                .Property(s => s.Peso)
-                .HasPrecision(6, 3);
+            modelBuilder.Entity<MissaoParticipante>()
+                .HasKey(mp => new { mp.MissaoId, mp.SoldadoId });
 
-          
-            modelBuilder.Entity<ItemBatalha>()
-                .Property(i => i.Peso)
-                .HasPrecision(6, 3);
+            modelBuilder.Entity<MissaoParticipante>()
+                .HasOne(mp => mp.Soldado)
+                .WithMany(s => s.MissoesParticipadas)
+                .HasForeignKey(mp => mp.SoldadoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<MissaoParticipante>()
+                .HasOne(mp => mp.Missao)
+                .WithMany(m => m.Participantes)
+                .HasForeignKey(mp => mp.MissaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+           
+            modelBuilder.Entity<TreinamentoParticipante>()
+                .HasKey(tp => new { tp.TreinamentoId, tp.SoldadoId });
+
+            modelBuilder.Entity<TreinamentoParticipante>()
+                .HasOne(tp => tp.Soldado)
+                .WithMany(s => s.TreinamentosParticipados)
+                .HasForeignKey(tp => tp.SoldadoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TreinamentoParticipante>()
+                .HasOne(tp => tp.Treinamento)
+                .WithMany(t => t.Participantes)
+                .HasForeignKey(tp => tp.TreinamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

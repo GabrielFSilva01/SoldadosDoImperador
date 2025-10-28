@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using SoldadosDoImperador.Models;
 
 namespace SoldadosDoImperador.Controllers
 {
-    
     public class ItemBatalhasController : Controller
     {
         private readonly ContextoWarhammer _context;
@@ -19,16 +19,15 @@ namespace SoldadosDoImperador.Controllers
             _context = context;
         }
 
+        // Helper (mantido)
         private IQueryable<ItemBatalha> ObterItensComRelacoes()
         {
             return _context.ItensBatalha.Include(i => i.Soldado);
         }
 
-  
         // GET: ItemBatalhas
         public async Task<IActionResult> Index()
         {
-            
             return View(await ObterItensComRelacoes().ToListAsync());
         }
 
@@ -40,7 +39,6 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-         
             var itemBatalha = await ObterItensComRelacoes()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -53,19 +51,19 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: ItemBatalhas/Create
+   
         public IActionResult Create()
         {
-            
-            ViewData["Soldado Escalado para missão "] = new SelectList(_context.Soldados, "Id", "Nome");
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome");
             return View();
         }
 
         // POST: ItemBatalhas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Tipo,Peso,Especificacao,SoldadoId")] ItemBatalha itemBatalha)
+        
+        public async Task<IActionResult> Create([Bind("Nome,Tipo,Peso,Especificacao,SoldadoId")] ItemBatalha itemBatalha)
         {
-          
             if (ModelState.IsValid)
             {
                 _context.Add(itemBatalha);
@@ -73,12 +71,13 @@ namespace SoldadosDoImperador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Repopula ViewData em caso de falha
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
+            // CORRIGIDO: Repopula o dropdown em caso de falha
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
             return View(itemBatalha);
         }
 
         // GET: ItemBatalhas/Edit/5
+  
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,14 +85,12 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            
             var itemBatalha = await _context.ItensBatalha.FindAsync(id);
             if (itemBatalha == null)
             {
                 return NotFound();
             }
-
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
             return View(itemBatalha);
         }
 
@@ -127,8 +124,9 @@ namespace SoldadosDoImperador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-           
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
+
+          
+            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
             return View(itemBatalha);
         }
 

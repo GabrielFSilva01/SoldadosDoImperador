@@ -1,11 +1,10 @@
-ï»¿@model SoldadosDoImperador.Models.Missao
+@model SoldadosDoImperador.Models.Missao
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Editar missão</h1>
 
 <h4>Missao</h4>
 <hr />
@@ -43,11 +42,6 @@
                 <label asp-for="DataFim" class="control-label"></label>
                 <input asp-for="DataFim" class="form-control" />
                 <span asp-validation-for="DataFim" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoldadoId" class="control-label"></label>
-                <select asp-for="SoldadoId" class="form-control" asp-items="ViewBag.SoldadoId"></select>
-                <span asp-validation-for="SoldadoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

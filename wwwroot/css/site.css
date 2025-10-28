@@ -1,107 +1,133 @@
-
 :root {
-    /* Cores da Armadura */
-    --ultramarine-blue: #003366; /* Azul profundo da armadura Astartes */
-    --ultramarine-dark: #002244; /* Azul muito escuro para fundo/shadows */
-    --imperial-gold: #c39a3e; /* Dourado Imperial para detalhes e textos */
-    --focus-red: #cc0000; /* Vermelho de Alerta/Foco */
-    --text-light: #f0f0f0; /* Cor do texto principal */
+    /* Cores da Armadura (Sua paleta) */
+    --ultramarine-blue: #003366;
+    --ultramarine-dark: #002244;
+    --imperial-gold: #c39a3e;
+    --focus-red: #cc0000;
+    --text-light: #f0f0f0;
+    --text-dark: #3B2F2F;
+    --background-dark-metal: #1a1a1a;
+    --input-background: #333;
 }
 
+/* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
 
-
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
+html {
+    font-size: 16px;
+    position: relative;
+    min-height: 100%;
 }
+
+body {
+    /* Fonte base (Serifada, estilo "Pergaminho") */
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 60px; /* Garante espaço para o footer */
+}
+
+/* Títulos, Navbar, Botões (Fonte Imperial) */
+h1, h2, h3, h4, h5,
+.navbar-brand,
+.nav-link,
+.btn,
+.form-group label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* --- ESTILOS BASE CORRIGIDOS (Usando suas variáveis) --- */
 
 a {
-    color: #0077cc;
+    color: var(--imperial-gold); /* Links Dourados */
+    transition: color 0.2s ease-in-out;
 }
 
+    a:hover, .nav-link:hover {
+        color: var(--focus-red) !important; /* Vermelho ao passar o mouse */
+    }
+
+/* Botão Primário (Salvar, Criar) */
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--imperial-gold);
+    border: 1px solid var(--ultramarine-blue);
+    transition: all 0.2s ease-in-out;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    .btn-primary:hover {
+        color: #000;
+        background-color: var(--text-light);
+        border-color: var(--imperial-gold);
+    }
+
+/* Botão Secundário (Editar, Detalhes) */
+.btn-secondary {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--ultramarine-blue);
+    border: 1px solid var(--imperial-gold);
+    transition: all 0.2s ease-in-out;
 }
 
-.border-top {
-    border-top: 1px solid #e5e5e5;
+    .btn-secondary:hover {
+        background-color: var(--ultramarine-dark);
+        border-color: var(--focus-red);
+    }
+
+/* Botão de Perigo (Excluir) */
+.btn-danger {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--focus-red);
+    border-color: #000;
 }
 
-.border-bottom {
-    border-bottom: 1px solid #e5e5e5;
-}
+    .btn-danger:hover {
+        color: #000;
+        background-color: var(--text-light);
+        border-color: var(--focus-red);
+    }
 
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
+/* --- TEMA GLOBAL --- */
 
-button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
-}
-
-
-
-/* Ativa o fundo principal do corpo da página */
 .theme-ultramarine {
-    background-color: var(--ultramarine-dark) !important;
-    color: var(--text-light) !important;
+    background-color: var(--ultramarine-dark);
+    color: var(--text-light);
     padding-top: 50px;
 }
 
-    /* Barra de Navegação */
     .theme-ultramarine header .navbar {
         background-color: var(--ultramarine-blue) !important;
         border-bottom: 3px solid var(--imperial-gold) !important;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
     }
 
-    /* Links e Marca */
     .theme-ultramarine .navbar-brand,
     .theme-ultramarine .nav-link {
         color: var(--imperial-gold) !important;
-        font-weight: 700;
     }
 
-        .theme-ultramarine .nav-link:hover {
-            color: var(--focus-red) !important;
-        }
-
-    /* Container Principal */
     .theme-ultramarine .container {
-        background-color: #1a1a1a; /* Fundo escuro para o conteúdo */
+        background-color: var(--background-dark-metal);
         border: 1px solid var(--ultramarine-blue);
         padding: 30px;
         margin-top: 20px;
         border-radius: 8px;
     }
 
-    /* Títulos */
     .theme-ultramarine h1,
     .theme-ultramarine h3,
     .theme-ultramarine .h1 {
         color: var(--focus-red) !important;
         border-bottom: 1px solid var(--imperial-gold);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
     }
 
-    /* Texto Geral e Formulários */
     .theme-ultramarine .form-control,
     .theme-ultramarine .form-group label,
     .theme-ultramarine .table,
@@ -112,11 +138,10 @@ button.accept-policy {
     }
 
     .theme-ultramarine .form-control {
-        background-color: #333 !important;
+        background-color: var(--input-background) !important;
         border-color: var(--ultramarine-blue) !important;
     }
 
-    /* Footer */
     .theme-ultramarine .footer {
         background-color: var(--ultramarine-blue) !important;
         color: var(--text-light) !important;
@@ -124,11 +149,11 @@ button.accept-policy {
     }
 
 
-
+/* --- PERFIL DE SOLDADO (Mantido) --- */
 
 .soldado-profile {
     background-color: #1f2732;
-    border: 5px solid var(--imperial-gold); /* Borda dourada de autoridade */
+    border: 5px solid var(--imperial-gold);
     border-radius: 12px;
     padding: 30px;
     margin-top: 20px;
@@ -148,3 +173,70 @@ button.accept-policy {
         background-color: #262c35 !important;
         border-color: #3f526b !important;
     }
+
+/* --- PAINEL DE COMANDO (Home Page) --- */
+
+.controller-home .container {
+    background-color: transparent;
+    border: none;
+}
+
+.dashboard-card {
+    background-color: var(--background-dark-metal);
+    border: 2px solid var(--ultramarine-blue);
+    border-radius: 4px;
+    padding: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-light);
+    transition: all 0.2s ease-in-out;
+    display: block;
+    height: 100%;
+}
+
+    .dashboard-card:hover {
+        border-color: var(--imperial-gold);
+        background-color: #2a2a2a;
+        color: var(--imperial-gold);
+        transform: translateY(-5px);
+    }
+
+    .dashboard-card h3 {
+        color: var(--imperial-gold) !important;
+        border-bottom: 1px solid var(--ultramarine-blue);
+        padding-bottom: 10px;
+    }
+
+    .dashboard-card p {
+        font-family: 'EB Garamond', serif;
+        font-size: 1.1rem;
+        color: var(--text-light);
+    }
+
+
+/* --- CLASSES DE LAYOUT PADRÃO (Ajustadas) --- */
+
+.border-top {
+    border-top: 1px solid var(--ultramarine-blue) !important;
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--ultramarine-blue) !important;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .4);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}

@@ -1,48 +1,245 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿:root {
+    /* Cores da Armadura (Sua paleta) */
+    --ultramarine-blue: #003366;
+    --ultramarine-dark: #002244;
+    --imperial-gold: #c39a3e;
+    --focus-red: #cc0000;
+    --text-light: #f0f0f0;
+    --text-dark: #3B2F2F;
+    --background-dark-metal: #1a1a1a;
+    --input-background: #333;
 }
+
+/* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
+/* (Requer a importação das fontes no _Layout.cshtml) */
+
+html {
+    font-size: 16px;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Fonte base (Serifada, estilo "Pergaminho") */
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 60px; /* Garante espaço para o footer */
+}
+
+/* Títulos, Navbar, Botões (Fonte Imperial) */
+h1, h2, h3, h4, h5,
+.navbar-brand,
+.nav-link,
+.btn,
+.form-group label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* --- ESTILOS BASE CORRIGIDOS (Usando suas variáveis) --- */
 
 a {
-  color: #0077cc;
+    color: var(--imperial-gold); /* Links Dourados */
+    transition: color 0.2s ease-in-out;
 }
 
+    a:hover, .nav-link:hover {
+        color: var(--focus-red) !important; /* Vermelho ao passar o mouse */
+    }
+
+/* Botão Primário (Salvar, Criar) */
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--imperial-gold);
+    border: 1px solid var(--ultramarine-blue);
+    transition: all 0.2s ease-in-out;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .btn-primary:hover {
+        color: #000;
+        background-color: var(--text-light);
+        border-color: var(--imperial-gold);
+    }
+
+/* Botão Secundário (Editar, Detalhes) */
+.btn-secondary {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--ultramarine-blue);
+    border: 1px solid var(--imperial-gold);
+    transition: all 0.2s ease-in-out;
 }
+
+    .btn-secondary:hover {
+        background-color: var(--ultramarine-dark);
+        border-color: var(--focus-red);
+    }
+
+/* Botão de Perigo (Excluir) */
+.btn-danger {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--text-light);
+    background-color: var(--focus-red);
+    border-color: #000;
+}
+
+    .btn-danger:hover {
+        color: #000;
+        background-color: var(--text-light);
+        border-color: var(--focus-red);
+    }
+
+/* --- TEMA GLOBAL --- */
+/* (Requer a classe 'theme-ultramarine' no <body> do _Layout.cshtml) */
+
+.theme-ultramarine {
+    background-color: var(--ultramarine-dark);
+    color: var(--text-light);
+    padding-top: 50px;
+}
+
+    .theme-ultramarine header .navbar {
+        background-color: var(--ultramarine-blue) !important;
+        border-bottom: 3px solid var(--imperial-gold) !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .theme-ultramarine .navbar-brand,
+    .theme-ultramarine .nav-link {
+        color: var(--imperial-gold) !important;
+    }
+
+    .theme-ultramarine .container {
+        background-color: var(--background-dark-metal);
+        border: 1px solid var(--ultramarine-blue);
+        padding: 30px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .theme-ultramarine h1,
+    .theme-ultramarine h3,
+    .theme-ultramarine .h1 {
+        color: var(--focus-red) !important;
+        border-bottom: 1px solid var(--imperial-gold);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .theme-ultramarine .form-control,
+    .theme-ultramarine .form-group label,
+    .theme-ultramarine .table,
+    .theme-ultramarine .table a,
+    .theme-ultramarine .table tbody td,
+    .theme-ultramarine .text-dark {
+        color: var(--text-light) !important;
+    }
+
+    .theme-ultramarine .form-control {
+        background-color: var(--input-background) !important;
+        border-color: var(--ultramarine-blue) !important;
+    }
+
+    .theme-ultramarine .footer {
+        background-color: var(--ultramarine-blue) !important;
+        color: var(--text-light) !important;
+        border-top: 2px solid var(--imperial-gold);
+    }
+
+
+/* --- PERFIL DE SOLDADO (Mantido) --- */
+
+.soldado-profile {
+    background-color: #1f2732;
+    border: 5px solid var(--imperial-gold);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+}
+
+    .soldado-profile h3 {
+        color: var(--focus-red) !important;
+        border-bottom: 2px solid var(--ultramarine-blue) !important;
+    }
+
+    .soldado-profile dl.row dt {
+        color: var(--imperial-gold);
+        font-weight: 700;
+    }
+
+    .soldado-profile .list-group-item {
+        background-color: #262c35 !important;
+        border-color: #3f526b !important;
+    }
+
+/* --- PAINEL DE COMANDO (Home Page) --- */
+/* (Requer a classe 'controller-home' no <body>) */
+
+.controller-home .container {
+    background-color: transparent;
+    border: none;
+}
+
+.dashboard-card {
+    background-color: var(--background-dark-metal);
+    border: 2px solid var(--ultramarine-blue);
+    border-radius: 4px;
+    padding: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-light);
+    transition: all 0.2s ease-in-out;
+    display: block;
+    height: 100%;
+}
+
+    .dashboard-card:hover {
+        border-color: var(--imperial-gold);
+        background-color: #2a2a2a;
+        color: var(--imperial-gold);
+        transform: translateY(-5px);
+    }
+
+    .dashboard-card h3 {
+        color: var(--imperial-gold) !important;
+        border-bottom: 1px solid var(--ultramarine-blue);
+        padding-bottom: 10px;
+    }
+
+    .dashboard-card p {
+        font-family: 'EB Garamond', serif;
+        font-size: 1.1rem;
+        color: var(--text-light);
+    }
+
+
+/* --- CLASSES DE LAYOUT PADRÃO (Ajustadas) --- */
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--ultramarine-blue) !important;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--ultramarine-blue) !important;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .4);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }

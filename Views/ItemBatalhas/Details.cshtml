@@ -1,8 +1,7 @@
-﻿@model SoldadosDoImperador.Models.ItemBatalha
+@model SoldadosDoImperador.Models.ItemBatalha
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Details</h1>
@@ -39,7 +38,7 @@
             @Html.DisplayNameFor(model => model.Soldado)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Soldado.Id)
+            @Html.DisplayFor(model => model.Soldado.Nome)
         </dd>
     </dl>
 </div>

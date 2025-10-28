@@ -1,8 +1,61 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Painel de Comando";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Seja bem vindo Primaca ! </h1>
-    <p>Aprenda sobre Warhammer neste site:  <a href="https://www.warhammer.com/en-WW/warhammer-40000-lp?srsltid=AfmBOoouJjb2PvFNQ64VYVTQ2ROKxfTHw3X6Pi-qmHiA1-1TS0XOcdQS"> Boa sorte e lute pelo imperador! </a>.</p>
+    <h1 class="display-4">Seja bem vindo Primarca!</h1>
+
+    <p>
+        Aprenda sobre Warhammer neste site:
+        <a href="https://www.warhammer.com/en-WW/warhammer-40000-lp" target="_blank">
+            Boa sorte e lute pelo imperador!
+        </a>
+    </p>
+</div>
+<hr class="border-top mb-4" />
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <a asp-controller="Soldados" asp-action="Index" class="dashboard-card">
+            <h3>Registro de Astartes</h3>
+            <p>Gerenciar, criar e editar perfis de Soldados (Space Marines).</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="Missoes" asp-action="Index" class="dashboard-card">
+            <h3>Gestão de Missões</h3>
+            <p>Criar missões e designar múltiplos soldados para operações táticas.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="Treinamentos" asp-action="Index" class="dashboard-card">
+            <h3>Doutrinação</h3>
+            <p>Agendar sessões de treinamento e atribuir participantes.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="Ordens" asp-action="Index" class="dashboard-card">
+            <h3>Ordens de Batalha</h3>
+            <p>Emitir ordens diretas para unidades de Astartes individuais.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="ItemBatalhas" asp-action="Index" class="dashboard-card">
+            <h3>Arsenal</h3>
+            <p>Administrar o inventário de armas e equipamentos de batalha.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="#" class="dashboard-card" style="opacity: 0.5; cursor: not-allowed;">
+            <h3>Relatórios (Em Breve)</h3>
+            <p>Analisar estatísticas de desempenho em combate.</p>
+        </a>
+    </div>
+
 </div>

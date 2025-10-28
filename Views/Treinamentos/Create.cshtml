@@ -1,11 +1,10 @@
-﻿@model SoldadosDoImperador.Models.Treinamento
+@model SoldadosDoImperador.Models.Treinamento
 
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Criar";
 }
 
-<h1>Create</h1>
+<h1>Criar novo Treinamento</h1>
 
 <h4>Treinamento</h4>
 <hr />
@@ -32,10 +31,6 @@
                 <label asp-for="DataRealizacao" class="control-label"></label>
                 <input asp-for="DataRealizacao" class="form-control" />
                 <span asp-validation-for="DataRealizacao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoldadoId" class="control-label"></label>
-                <select asp-for="SoldadoId" class ="form-control" asp-items="ViewBag.SoldadoId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,18 +19,7 @@ namespace SoldadosDoImperador.Controllers
             _context = context;
         }
 
-     
-        private IQueryable<Soldado> ObterSoldadosComRelacoes()
-        {
-            return _context.Soldados
-                .Include(s => s.ItensDeBatalha)
-                .Include(s => s.Missoes)
-                .Include(s => s.Treinamentos)
-                .Include(s => s.OrdensRecebidas);
-        }
-
-     
-        // GET: Soldados/Index
+        // GET: Soldados
         public async Task<IActionResult> Index()
         {
             return View(await _context.Soldados.ToListAsync());
@@ -44,9 +33,8 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            var soldado = await ObterSoldadosComRelacoes()
+            var soldado = await _context.Soldados
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (soldado == null)
             {
                 return NotFound();
@@ -56,18 +44,22 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Soldados/Create
-
         public IActionResult Create()
         {
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)));
             ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)));
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)));
             return View();
         }
 
         // POST: Soldados/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        // POST: Soldados/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Capitulo,Patente,Altura,Peso")] Soldado soldado)
+     
+        public async Task<IActionResult> Create([Bind("Nome,Capitulo,Patente,Altura,Peso")] Soldado soldado)
         {
             if (ModelState.IsValid)
             {
@@ -76,8 +68,9 @@ namespace SoldadosDoImperador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)), soldado.Capitulo);
+           
             ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)), soldado.Patente);
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)), soldado.Capitulo);
             return View(soldado);
         }
 
@@ -90,21 +83,16 @@ namespace SoldadosDoImperador.Controllers
             }
 
             var soldado = await _context.Soldados.FindAsync(id);
-
             if (soldado == null)
             {
-                ViewData["BodyClass"] = "theme-ultramarine";
                 return NotFound();
             }
-
-            // CRUCIAL: Passa o valor atual (soldado.Capitulo/Patente) para que a opção seja pré-selecionada no formulário.
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)), soldado.Capitulo);
-            ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)), soldado.Patente);
-
             return View(soldado);
         }
 
         // POST: Soldados/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Capitulo,Patente,Altura,Peso")] Soldado soldado)
@@ -134,9 +122,6 @@ namespace SoldadosDoImperador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)), soldado.Capitulo);
-            ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)), soldado.Patente);
-
             return View(soldado);
         }
 
@@ -148,9 +133,8 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            var soldado = await ObterSoldadosComRelacoes()
+            var soldado = await _context.Soldados
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (soldado == null)
             {
                 return NotFound();
@@ -165,7 +149,6 @@ namespace SoldadosDoImperador.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var soldado = await _context.Soldados.FindAsync(id);
-
             if (soldado != null)
             {
                 _context.Soldados.Remove(soldado);

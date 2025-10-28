@@ -1,14 +1,13 @@
-ï»¿@model IEnumerable<SoldadosDoImperador.Models.Missao>
+@model IEnumerable<SoldadosDoImperador.Models.Missao>
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar nova missão</a>
 </p>
 <table class="table">
     <thead>
@@ -30,9 +29,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DataFim)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Soldado)
             </th>
             <th></th>
         </tr>
@@ -57,9 +53,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Soldado.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

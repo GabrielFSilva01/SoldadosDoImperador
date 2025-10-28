@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,22 +19,15 @@ namespace SoldadosDoImperador.Controllers
             _context = context;
         }
 
-        private IQueryable<Missao> ObterMissoesComRelacoes()
-        {
-            // Retorna a consulta base com a inclusão do Soldado.
-            return _context.Missoes.Include(m => m.Soldado);
-        }
-
-       
         // GET: Missoes
-        
+ 
         public async Task<IActionResult> Index()
         {
-            return View(await ObterMissoesComRelacoes().ToListAsync());
+            return View(await _context.Missoes.ToListAsync());
         }
 
         // GET: Missoes/Details/5
-      
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,7 +35,10 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            var missao = await ObterMissoesComRelacoes() 
+         
+            var missao = await _context.Missoes
+                .Include(m => m.Participantes)
+                    .ThenInclude(mp => mp.Soldado) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (missao == null)
@@ -50,34 +46,47 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
+        
+            var idsParticipantes = missao.Participantes.Select(p => p.SoldadoId).ToList();
+
+           
+            var soldadosDisponiveis = await _context.Soldados
+                .Where(s => !idsParticipantes.Contains(s.Id))
+                .OrderBy(s => s.Nome) // Ordena alfabeticamente
+                .ToListAsync();
+
+           
+            ViewData["SoldadosDisponiveis"] = new SelectList(soldadosDisponiveis, "Id", "Nome");
+
             return View(missao);
         }
 
         // GET: Missoes/Create
+     
         public IActionResult Create()
         {
-         
-            ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome");
+            
             return View();
         }
 
         // POST: Missoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Objetivo,Status,DataInicio,Localizacao,DataFim,SoldadoId")] Missao missao)
+       
+        public async Task<IActionResult> Create([Bind("Id,Nome,Objetivo,Status,DataInicio,Localizacao,DataFim")] Missao missao)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(missao);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Redireciona para a p�gina Details para que o usu�rio possa adicionar soldados
+                return RedirectToAction(nameof(Details), new { id = missao.Id });
             }
-            
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", missao.SoldadoId);
             return View(missao);
         }
 
         // GET: Missoes/Edit/5
+   
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,21 +94,19 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            // Usamos FindAsync pois não precisamos da relação aqui
             var missao = await _context.Missoes.FindAsync(id);
             if (missao == null)
             {
                 return NotFound();
             }
-            
-            ViewData["Soldado Escalado para missão"] = new SelectList(_context.Soldados, "Id", "Nome", missao.SoldadoId);
             return View(missao);
         }
 
         // POST: Missoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Objetivo,Status,DataInicio,Localizacao,DataFim,SoldadoId")] Missao missao)
+       
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Objetivo,Status,DataInicio,Localizacao,DataFim")] Missao missao)
         {
             if (id != missao.Id)
             {
@@ -110,7 +117,6 @@ namespace SoldadosDoImperador.Controllers
             {
                 try
                 {
-                    // Lógica de atualização e concorrência
                     _context.Update(missao);
                     await _context.SaveChangesAsync();
                 }
@@ -125,14 +131,13 @@ namespace SoldadosDoImperador.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+             
+                return RedirectToAction(nameof(Details), new { id = missao.Id });
             }
-            ViewData["Soldado escalado para a missão"] = new SelectList(_context.Soldados, "Id", "Nome", missao.SoldadoId);
             return View(missao);
         }
 
         // GET: Missoes/Delete/5
-       
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,7 +145,10 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            var missao = await ObterMissoesComRelacoes() 
+         
+            var missao = await _context.Missoes
+                .Include(m => m.Participantes)
+                    .ThenInclude(mp => mp.Soldado)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (missao == null)
@@ -159,12 +167,70 @@ namespace SoldadosDoImperador.Controllers
             var missao = await _context.Missoes.FindAsync(id);
             if (missao != null)
             {
-                _context.Missoes.Remove(missao);
-            }
+         
+           
+                var participantes = _context.MissoesParticipantes.Where(mp => mp.MissaoId == id);
+                _context.MissoesParticipantes.RemoveRange(participantes);
 
-            await _context.SaveChangesAsync();
+                
+                _context.Missoes.Remove(missao);
+
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
+
+       
+
+        // POST: Missoes/AdicionarParticipante
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdicionarParticipante(int missaoId, int soldadoId)
+        {
+         
+            if (soldadoId <= 0)
+            {
+
+                return RedirectToAction(nameof(Details), new { id = missaoId });
+            }
+
+           
+            var jaExiste = await _context.MissoesParticipantes
+                .AnyAsync(mp => mp.MissaoId == missaoId && mp.SoldadoId == soldadoId);
+
+            if (!jaExiste)
+            {
+                var novoParticipante = new MissaoParticipante
+                {
+                    MissaoId = missaoId,
+                    SoldadoId = soldadoId
+                };
+
+                _context.MissoesParticipantes.Add(novoParticipante);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Details), new { id = missaoId });
+        }
+
+        // POST: Missoes/RemoverParticipante
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoverParticipante(int missaoId, int soldadoId)
+        {
+            var participante = await _context.MissoesParticipantes
+                .FirstOrDefaultAsync(mp => mp.MissaoId == missaoId && mp.SoldadoId == soldadoId);
+
+            if (participante != null)
+            {
+                _context.MissoesParticipantes.Remove(participante);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Details), new { id = missaoId });
+        }
+
+       
 
         private bool MissaoExists(int id)
         {
