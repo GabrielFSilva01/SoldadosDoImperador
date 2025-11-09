@@ -1,65 +1,60 @@
 @model IEnumerable<SoldadosDoImperador.Models.Missao>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Registro de Missões";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Criar nova missão</a>
-</p>
-<table class="table">
+@if (User.IsInRole("PRIMARCH"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">
+            + Criar Nova Missão
+        </a>
+    </div>
+}
+
+<table class="table table-striped table-dark">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Objetivo)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataInicio)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Localizacao)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataFim)
-            </th>
-            <th></th>
+            @if (User.IsInRole("PRIMARCH"))
+            {
+                <th style="width: 200px;">Ações</th>
+            }
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Objetivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Localizacao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFim)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Localizacao)
+                </td>
+                @if (User.IsInRole("PRIMARCH"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

@@ -15,11 +15,11 @@ namespace SoldadosDoImperador.Models
 
     public class Ordem
     {
-        // 1. Chave Primária
+      
         [Key]
         public int Id { get; set; }
 
-        // --- Propriedades de Dados ---
+       
 
         // 2. Título
         [Required(ErrorMessage = "O Título da Ordem é obrigatório.")]

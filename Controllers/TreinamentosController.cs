@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,23 +11,21 @@ using SoldadosDoImperador.Models;
 
 namespace SoldadosDoImperador.Controllers
 {
-    public class TreinamentosController : Controller
+    [Authorize]
+
+    public class TreinamentosController(ContextoWarhammer context) : Controller
     {
-        private readonly ContextoWarhammer _context;
+      
+        private readonly ContextoWarhammer _context = context;
 
-        public TreinamentosController(ContextoWarhammer context)
-        {
-            _context = context;
-        }
-
-        // GET: Treinamentos
+      
         public async Task<IActionResult> Index()
         {
             return View(await _context.Treinamentos.ToListAsync());
         }
 
-        // GET: Treinamentos/Details/5
-      
+
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,7 +35,7 @@ namespace SoldadosDoImperador.Controllers
 
             var treinamento = await _context.Treinamentos
                 .Include(t => t.Participantes)
-                    .ThenInclude(tp => tp.Soldado) 
+                    .ThenInclude(tp => tp.Soldado)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (treinamento == null)
@@ -44,7 +43,6 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
 
-            // Lógica M-N para o dropdown
             var idsParticipantes = treinamento.Participantes.Select(p => p.SoldadoId).ToList();
             var soldadosDisponiveis = await _context.Soldados
                 .Where(s => !idsParticipantes.Contains(s.Id))
@@ -57,12 +55,14 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Treinamentos/Create
+        [Authorize(Roles = "PRIMARCH")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Treinamentos/Create
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao")] Treinamento treinamento)
@@ -77,6 +77,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Treinamentos/Edit/5
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,6 +94,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: Treinamentos/Edit/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Area,DuracaoHoras,DataRealizacao")] Treinamento treinamento)
@@ -126,7 +128,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Treinamentos/Delete/5
-  
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +138,7 @@ namespace SoldadosDoImperador.Controllers
 
             var treinamento = await _context.Treinamentos
                 .Include(t => t.Participantes)
-                    .ThenInclude(tp => tp.Soldado) 
+                    .ThenInclude(tp => tp.Soldado)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (treinamento == null)
@@ -148,6 +150,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: Treinamentos/Delete/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -164,8 +167,9 @@ namespace SoldadosDoImperador.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+      
 
-
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AdicionarParticipante(int treinamentoId, int soldadoId)
@@ -193,6 +197,7 @@ namespace SoldadosDoImperador.Controllers
             return RedirectToAction(nameof(Details), new { id = treinamentoId });
         }
 
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoverParticipante(int treinamentoId, int soldadoId)

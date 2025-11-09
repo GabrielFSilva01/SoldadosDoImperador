@@ -7,32 +7,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoldadosDoImperador.Data;
 using SoldadosDoImperador.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace SoldadosDoImperador.Controllers
 {
-    public class OrdensController : Controller
+    [Authorize] 
+    public class OrdensController(ContextoWarhammer context) : Controller
     {
-        private readonly ContextoWarhammer _context;
-
-        public OrdensController(ContextoWarhammer context)
-        {
-            _context = context;
-        }
+        private readonly ContextoWarhammer _context = context;
 
        
+
         private IQueryable<Ordem> ObterOrdensComRelacoes()
         {
             return _context.Ordens.Include(o => o.Soldado);
         }
 
-        // GET: Ordens
+        // GET: Ordens 
         public async Task<IActionResult> Index()
         {
-         
             return View(await ObterOrdensComRelacoes().ToListAsync());
         }
 
-        // GET: Ordens/Details/5
+        // GET: Ordens/Details/5 
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,18 +49,19 @@ namespace SoldadosDoImperador.Controllers
             return View(ordem);
         }
 
-    
+        // GET: Ordens/Create
+        [Authorize(Roles = "PRIMARCH")]
         public IActionResult Create()
         {
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome");
-            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)));
+            ViewData["Status"] = new SelectList(Enum.GetValues<StatusOrdem>());
             return View();
         }
 
         // POST: Ordens/Create
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
         public async Task<IActionResult> Create([Bind("Titulo,Descricao,Status,DataEmissao,PrazoFinal,SoldadoId")] Ordem ordem)
         {
             if (ModelState.IsValid)
@@ -72,14 +71,13 @@ namespace SoldadosDoImperador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // CORRIGIDO: Repopula os dropdowns em caso de falha
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
-            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
+            ViewData["Status"] = new SelectList(Enum.GetValues<StatusOrdem>(), ordem.Status);
             return View(ordem);
         }
 
         // GET: Ordens/Edit/5
-      
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,11 +91,13 @@ namespace SoldadosDoImperador.Controllers
                 return NotFound();
             }
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
-            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
+            // --- CORRIGIDO: Sintaxe de Enum ---
+            ViewData["Status"] = new SelectList(Enum.GetValues<StatusOrdem>(), ordem.Status);
             return View(ordem);
         }
 
         // POST: Ordens/Edit/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descricao,Status,DataEmissao,PrazoFinal,SoldadoId")] Ordem ordem)
@@ -129,11 +129,12 @@ namespace SoldadosDoImperador.Controllers
             }
 
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", ordem.SoldadoId);
-            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(StatusOrdem)), ordem.Status);
+            ViewData["Status"] = new SelectList(Enum.GetValues<StatusOrdem>(), ordem.Status);
             return View(ordem);
         }
 
         // GET: Ordens/Delete/5
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -153,6 +154,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: Ordens/Delete/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

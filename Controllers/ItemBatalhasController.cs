@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization; // <-- Garante que a autorização está importada
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,28 +11,27 @@ using SoldadosDoImperador.Models;
 
 namespace SoldadosDoImperador.Controllers
 {
-    public class ItemBatalhasController : Controller
+    [Authorize] 
+    public class ItemBatalhasController(ContextoWarhammer context) : Controller
     {
-        private readonly ContextoWarhammer _context;
+        private readonly ContextoWarhammer _context = context;
 
-        public ItemBatalhasController(ContextoWarhammer context)
-        {
-            _context = context;
-        }
+       
 
-        // Helper (mantido)
+      
         private IQueryable<ItemBatalha> ObterItensComRelacoes()
         {
             return _context.ItensBatalha.Include(i => i.Soldado);
         }
 
-        // GET: ItemBatalhas
+        // GET: ItemBatalhas 
         public async Task<IActionResult> Index()
         {
             return View(await ObterItensComRelacoes().ToListAsync());
         }
 
-        // GET: ItemBatalhas/Details/5
+        // GET: ItemBatalhas/Details/5 
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,7 +51,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: ItemBatalhas/Create
-   
+        [Authorize(Roles = "PRIMARCH")]
         public IActionResult Create()
         {
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome");
@@ -59,9 +59,9 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: ItemBatalhas/Create
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
         public async Task<IActionResult> Create([Bind("Nome,Tipo,Peso,Especificacao,SoldadoId")] ItemBatalha itemBatalha)
         {
             if (ModelState.IsValid)
@@ -71,13 +71,12 @@ namespace SoldadosDoImperador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // CORRIGIDO: Repopula o dropdown em caso de falha
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
             return View(itemBatalha);
         }
 
         // GET: ItemBatalhas/Edit/5
-  
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -95,6 +94,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: ItemBatalhas/Edit/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Tipo,Peso,Especificacao,SoldadoId")] ItemBatalha itemBatalha)
@@ -125,12 +125,12 @@ namespace SoldadosDoImperador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-          
             ViewData["SoldadoId"] = new SelectList(_context.Soldados, "Id", "Nome", itemBatalha.SoldadoId);
             return View(itemBatalha);
         }
 
         // GET: ItemBatalhas/Delete/5
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,6 +150,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: ItemBatalhas/Delete/5
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

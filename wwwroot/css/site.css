@@ -12,6 +12,7 @@
 
 /* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
 
+
 html {
     font-size: 16px;
     position: relative;
@@ -35,7 +36,7 @@ h1, h2, h3, h4, h5,
     letter-spacing: 0.5px;
 }
 
-/* --- ESTILOS BASE CORRIGIDOS (Usando suas variáveis) --- */
+
 
 a {
     color: var(--imperial-gold); /* Links Dourados */
@@ -43,7 +44,7 @@ a {
 }
 
     a:hover, .nav-link:hover {
-        color: var(--focus-red) !important; /* Vermelho ao passar o mouse */
+        color: var(--focus-red) !important; 
     }
 
 /* Botão Primário (Salvar, Criar) */
@@ -93,6 +94,7 @@ a {
     }
 
 /* --- TEMA GLOBAL --- */
+/* (Requer a classe 'theme-ultramarine' no <body> do _Layout.cshtml) */
 
 .theme-ultramarine {
     background-color: var(--ultramarine-dark);
@@ -128,20 +130,6 @@ a {
         margin-bottom: 20px;
     }
 
-    .theme-ultramarine .form-control,
-    .theme-ultramarine .form-group label,
-    .theme-ultramarine .table,
-    .theme-ultramarine .table a,
-    .theme-ultramarine .table tbody td,
-    .theme-ultramarine .text-dark {
-        color: var(--text-light) !important;
-    }
-
-    .theme-ultramarine .form-control {
-        background-color: var(--input-background) !important;
-        border-color: var(--ultramarine-blue) !important;
-    }
-
     .theme-ultramarine .footer {
         background-color: var(--ultramarine-blue) !important;
         color: var(--text-light) !important;
@@ -175,6 +163,7 @@ a {
     }
 
 /* --- PAINEL DE COMANDO (Home Page) --- */
+
 
 .controller-home .container {
     background-color: transparent;
@@ -240,3 +229,38 @@ button.accept-policy {
     white-space: nowrap;
     line-height: 60px;
 }
+
+
+
+/* 1. Força o texto de formulários e texto normal (não-link) a ser claro */
+.theme-ultramarine .form-group label,
+.theme-ultramarine .table tbody td,
+.theme-ultramarine .table thead th,
+.theme-ultramarine dl dt,
+.theme-ultramarine dl dd,
+.theme-ultramarine .text-dark { 
+    color: var(--text-light) !important;
+}
+
+/* 2. Força os inputs de formulário a terem texto claro */
+.theme-ultramarine .form-control {
+    background-color: var(--input-background) !important;
+    border-color: var(--ultramarine-blue) !important;
+    color: var(--text-light) !important; /* Texto DENTRO do input */
+}
+
+/* 3. Força os LINKS (Edit/Details/Delete) a serem dourados */
+
+.theme-ultramarine .table td a,
+.theme-ultramarine dl dd a,
+.theme-ultramarine .container .btn-link { /* Links que parecem botões */
+    color: var(--imperial-gold) !important;
+    text-decoration: underline;
+}
+
+    /* 4. Força o Hover (Vermelho) */
+    .theme-ultramarine .table td a:hover,
+    .theme-ultramarine dl dd a:hover,
+    .theme-ultramarine .container .btn-link:hover {
+        color: var(--focus-red) !important;
+    }

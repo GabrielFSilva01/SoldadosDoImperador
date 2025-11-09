@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SoldadosDoImperador.Models;
 
 namespace SoldadosDoImperador.Controllers
 {
+    [Authorize] 
     public class SoldadosController : Controller
     {
         private readonly ContextoWarhammer _context;
@@ -26,6 +28,8 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Soldados/Details/5
+       
+        [Authorize(Roles = "PRIMARCH")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,21 +48,18 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // GET: Soldados/Create
+        [Authorize(Roles = "PRIMARCH")] 
         public IActionResult Create()
         {
-            ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)));
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)));
+            ViewData["Patente"] = new SelectList(Enum.GetValues<Patente>());
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues<Capitulo>());
             return View();
         }
 
         // POST: Soldados/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-
-        // POST: Soldados/Create
+        [Authorize(Roles = "PRIMARCH")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-     
         public async Task<IActionResult> Create([Bind("Nome,Capitulo,Patente,Altura,Peso")] Soldado soldado)
         {
             if (ModelState.IsValid)
@@ -67,14 +68,13 @@ namespace SoldadosDoImperador.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-           
-            ViewData["Patente"] = new SelectList(Enum.GetValues(typeof(Patente)), soldado.Patente);
-            ViewData["Capitulo"] = new SelectList(Enum.GetValues(typeof(Capitulo)), soldado.Capitulo);
+            ViewData["Patente"] = new SelectList(Enum.GetValues<Patente>(), soldado.Patente);
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues<Capitulo>(), soldado.Capitulo);
             return View(soldado);
         }
 
         // GET: Soldados/Edit/5
+        [Authorize(Roles = "PRIMARCH")] 
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,12 +87,13 @@ namespace SoldadosDoImperador.Controllers
             {
                 return NotFound();
             }
+            ViewData["Patente"] = new SelectList(Enum.GetValues<Patente>(), soldado.Patente);
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues<Capitulo>(), soldado.Capitulo);
             return View(soldado);
         }
 
         // POST: Soldados/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "PRIMARCH")] 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Capitulo,Patente,Altura,Peso")] Soldado soldado)
@@ -122,10 +123,14 @@ namespace SoldadosDoImperador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewData["Patente"] = new SelectList(Enum.GetValues<Patente>(), soldado.Patente);
+            ViewData["Capitulo"] = new SelectList(Enum.GetValues<Capitulo>(), soldado.Capitulo);
             return View(soldado);
         }
 
         // GET: Soldados/Delete/5
+        [Authorize(Roles = "PRIMARCH")] 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +149,7 @@ namespace SoldadosDoImperador.Controllers
         }
 
         // POST: Soldados/Delete/5
+        [Authorize(Roles = "PRIMARCH")] 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
