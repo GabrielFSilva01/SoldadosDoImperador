@@ -1,0 +1,100 @@
+@model SoldadosDoImperador.Models.Treinamento
+
+@{
+    ViewData["Title"] = "Detalhes do Treinamento";
+}
+
+<h1>@Model.Nome</h1>
+
+<div>
+    <h4>Dados do Treinamento</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Area)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Area)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DuracaoHoras)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DuracaoHoras)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataRealizacao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataRealizacao)
+        </dd>
+    </dl>
+</div>
+
+<hr class="border-top" />
+
+<div class="row">
+
+    <div class="col-md-6">
+        <h3>Participantes Atuais (@Model.Participantes.Count)</h3>
+
+        @if (Model.Participantes.Any())
+        {
+            <table class="table table-dark table-striped">
+                <tbody>
+                    @foreach (var participante in Model.Participantes.OrderBy(p => p.Soldado.Nome))
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Soldados" asp-action="Details" asp-route-id="@participante.SoldadoId">
+                                    @participante.Soldado.Nome (@participante.Soldado.Patente)
+                                </a>
+                            </td>
+                            <td class="text-right" style="width: 120px;">
+                                <form asp-action="RemoverParticipante" method="post">
+                                    <input type="hidden" name="treinamentoId" value="@Model.Id" />
+                                    <input type="hidden" name="soldadoId" value="@participante.SoldadoId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Nenhum soldado foi designado para este treinamento ainda.</p>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <h3>Designar Soldado</h3>
+
+        <form asp-action="AdicionarParticipante" method="post">
+            <input type="hidden" name="treinamentoId" value="@Model.Id" />
+
+            <div class="form-group">
+                <label class="control-label">Soldados Disponíveis</label>
+                <select name="soldadoId" class="form-control" asp-items="ViewBag.SoldadosDisponiveis">
+                    <option value="">-- Selecionar Soldado --</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Adicionar ao Treinamento" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-secondary">Editar Treinamento</a>
+    <a asp-action="Index" class="btn btn-light">Voltar para Lista</a>
+</div>
