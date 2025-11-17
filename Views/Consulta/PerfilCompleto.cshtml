@@ -1,0 +1,111 @@
+﻿@model SoldadosDoImperador.Models.Soldado
+
+@{
+    ViewData["Title"] = "Perfil Completo";
+}
+
+<h1>@ViewData["Title"]: @Model.Nome</h1>
+<p class="lead" style="font-family: 'EB Garamond', serif;">
+    @Model.Patente do Capítulo @Model.Capitulo
+</p>
+<hr />
+
+<div class="mb-3">
+    <a asp-action="ListarSoldadosParaPerfil" class="btn btn-secondary">Voltar para a Lista de Seleção</a>
+</div>
+<div class="soldado-profile">
+
+    <h3>Dados Biométricos</h3>
+    <dl class="row">
+        <dt class="col-sm-3">Altura</dt>
+        <dd class="col-sm-9">@Model.Altura m</dd>
+
+        <dt class="col-sm-3">Peso Corporal</dt>
+        <dd class="col-sm-9">@Model.Peso kg</dd>
+    </dl>
+    <hr />
+
+    <h3>Missões Designadas (@Model.MissoesParticipadas.Count)</h3>
+    @if (Model.MissoesParticipadas.Any())
+    {
+        <ul class="list-group list-group-flush mb-3">
+            @foreach (var participacao in Model.MissoesParticipadas)
+            {
+                <li class="list-group-item">
+                    <strong>@participacao.Missao.Nome</strong> (Status: @participacao.Missao.Status)
+                    <br />
+                    <small>Local: @participacao.Missao.Localizacao</small>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+
+        <p>Nenhum registo de missão.</p>
+    }
+    <hr />
+
+    <h3>Doutrinação (@Model.TreinamentosParticipados.Count)</h3>
+    @if (Model.TreinamentosParticipados.Any())
+    {
+        <ul class="list-group list-group-flush mb-3">
+            @foreach (var participacao in Model.TreinamentosParticipados)
+            {
+                <li class="list-group-item">
+                    <strong>@participacao.Treinamento.Nome</strong> (Área: @participacao.Treinamento.Area)
+                    <br />
+                    <small>Duração: @participacao.Treinamento.DuracaoHoras horas</small>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+
+        <p>Nenhum registo de treinamento.</p>
+    }
+    <hr />
+
+    <h3>Arsenal Pessoal (@Model.ItensDeBatalha.Count)</h3>
+    @if (Model.ItensDeBatalha.Any())
+    {
+        <ul class="list-group list-group-flush mb-3">
+            @foreach (var item in Model.ItensDeBatalha)
+            {
+                <li class="list-group-item">
+                    <strong>@item.Nome</strong> (Tipo: @item.Tipo)
+                    <br />
+                    <small>Peso: @item.Peso kg</small>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+
+        <p>Nenhum item de batalha atribuído.</p>
+    }
+    <hr />
+
+    <h3>Ordens Recebidas (@Model.OrdensRecebidas.Count)</h3>
+    @if (Model.OrdensRecebidas.Any())
+    {
+        <ul class="list-group list-group-flush mb-3">
+            @foreach (var ordem in Model.OrdensRecebidas.OrderByDescending(o => o.DataEmissao))
+            {
+                <li class="list-group-item">
+                    <strong>@ordem.Titulo</strong> (Status: @ordem.Status)
+                    <br />
+                    <small>Emitida: @ordem.DataEmissao.ToShortDateString() | Prazo: @ordem.PrazoFinal.ToShortDateString()</small>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+
+        <p>Nenhum registo de ordem direta.</p>
+    }
+
+</div>

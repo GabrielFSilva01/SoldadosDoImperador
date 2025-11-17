@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SoldadosDoImperador.Models.Soldado>
+
+@{
+    ViewData["Title"] = "Resultado da Pesquisa";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="PesquisaFiltro" class="btn btn-secondary">
+        &laquo; Voltar para Nova Pesquisa
+    </a>
+</p>
+
+@if (ViewData["FiltroNomeAtual"] != null || ViewData["FiltroPatenteAtual"] != null || ViewData["FiltroMissaoAtual"] != null)
+{
+    <div class="alert alert-info">
+        <strong>Filtros Ativos:</strong>
+        @if (ViewData["FiltroNomeAtual"] != null)
+        {
+            <span>Nome: @ViewData["FiltroNomeAtual"] |</span>
+        }
+        @if (ViewData["FiltroPatenteAtual"] != null)
+        {
+            <span>Patente: @ViewData["FiltroPatenteAtual"] |</span>
+        }
+        @if (ViewData["FiltroMissaoAtual"] != null)
+        {
+            <span>Missão: @ViewData["FiltroMissaoAtual"]</span>
+        }
+    </div>
+}
+
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.Capitulo)</th>
+            <th>@Html.DisplayNameFor(model => model.Patente)</th>
+            <th>@Html.DisplayNameFor(model => model.Altura)</th>
+            <th>@Html.DisplayNameFor(model => model.Peso)</th>
+            @if (User.IsInRole("PRIMARCH"))
+            {
+                <th>Ações</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.Capitulo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Patente)</td>
+                <td>@Html.DisplayFor(modelItem => item.Altura)</td>
+                <td>@Html.DisplayFor(modelItem => item.Peso)</td>
+
+                @if (User.IsInRole("PRIMARCH"))
+                {
+                    <td>
+                        <a asp-controller="Soldados" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Editar</a>
+                        <a asp-controller="Soldados" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
+                        <a asp-controller="Soldados" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SoldadosDoImperador.Models
 {
-    // Seus enums Patente e Capitulo
     public enum Patente
     {
         Recruta,
@@ -66,8 +65,6 @@ namespace SoldadosDoImperador.Models
         // 1. Relação M-N com Missao (Já feita)
         public ICollection<MissaoParticipante> MissoesParticipadas { get; set; } = new List<MissaoParticipante>();
 
-        // 2. MUDANÇA APLICADA AQUI
-        // Trocamos ICollection<Treinamento> pela coleção da tabela de junção.
         public ICollection<TreinamentoParticipante> TreinamentosParticipados { get; set; } = new List<TreinamentoParticipante>();
     }
 }

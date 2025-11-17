@@ -1,0 +1,42 @@
+﻿@model SoldadosDoImperador.ViewModels.PivoteamentoViewModel
+
+@{
+    ViewData["Title"] = "Relatório: Análise de Patentes por Capítulo";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead" style="font-family: 'EB Garamond', serif;">Consulta pivotada da distribuição de patentes dentro de cada capítulo.</p>
+<hr />
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-secondary">&laquo; Voltar ao Hub de Consultas</a>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-dark table-bordered">
+            <thead>
+                <tr class="text-center">
+                    <th style="width: 20%;" class="text-start">Capítulo</th>
+                    @foreach (var patente in Model.CabecalhosPatentes)
+                    {
+                        <th class="text-end">@patente</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var linha in Model.LinhasCapitulo)
+                {
+                    <tr>
+                        <td class="text-start"><strong>@linha.NomeCapitulo</strong></td>
+                        @foreach (var patenteHeader in Model.CabecalhosPatentes)
+                        {
+                            <td class="text-end" style="font-weight: bold; font-size: 1.1rem;">
+                                @linha.ContagemPorPatente[patenteHeader]
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Central de Consultas";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead" style="font-family: 'EB Garamond', serif;">Análise de dados estratégicos do Imperium.</p>
+<hr class="border-top mb-4" />
+
+<div class="mb-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">&laquo; Voltar ao Painel de Comando</a>
+</div>
+<div class="row g-4">
+
+    <div class="col-md-6">
+        <a asp-action="PesquisaFiltro" class="dashboard-card">
+            <h3>Filtrar Dados (Manter)</h3>
+            <p>Pesquisa dinâmica por Nome, Patente ou Missão.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6">
+        <a asp-action="ListarSoldadosParaPerfil" class="dashboard-card">
+            <h3>Perfil Completo (Múltiplas Tabelas)</h3>
+            <p>Relatório detalhado (Missões, Treinos, Itens) por soldado.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6">
+        <a asp-action="AgrupamentoCapitulo" class="dashboard-card">
+            <h3>Consulta de Agrupamento</h3>
+            <p>Totalização de soldados por Capítulo.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6">
+        <a asp-action="PivoteamentoCapituloPatente" class="dashboard-card">
+            <h3>Consulta de Pivot</h3>
+            <p>Cruzamento de dados (Patente x Capítulo).</p>
+        </a>
+    </div>
+
+    <div class="col-md-6">
+        <a asp-action="AgrupadoPorPatente" class="dashboard-card">
+            <h3>Lista por Patente (LINQ)</h3>
+            <p>Lista de soldados ordenada por Patente (Sintaxe LINQ).</p>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Pesquisa Avançada de Astartes";
+}
+<h1>@ViewData["Title"]</h1>
+<h4>Definir Filtros de Busca</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Consulta" asp-action="Soldado" method="get">
+
+            <div class="form-group mb-3">
+                <label class="control-label">Nome do Soldado</label>
+                <input name="filtroNome" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Patente</label>
+                <select name="filtroPatente" class="form-control" asp-items="ViewBag.Patentes">
+                    <option value="">-- Todas as Patentes --</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Participou da Missão</label>
+                <select name="filtroMissaoId" class="form-control" asp-items="ViewBag.Missoes">
+                    <option value="">-- Todas as Missões --</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Pesquisar" class="btn btn-primary" /> <a asp-action="Soldado" class="btn btn-secondary">Limpar Filtros (Ver Todos)</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Consulta: Perfil de Astartes";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead" style="font-family: 'EB Garamond', serif;">Selecione um operativo para ver o seu perfil completo de serviço (missões, treinos e arsenal).</p>
+<hr />
+
+<p>
+    <a asp-action="Index" class="btn btn-secondary">&laquo; Voltar ao Hub de Consultas</a>
+</p>
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Capítulo</th>
+            <th>Patente</th>
+            <th style="width: 150px;">Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.Capitulo</td>
+                <td>@item.Patente</td>
+                <td>
+                    <a asp-action="PerfilCompleto" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver Perfil Completo</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -12,50 +12,54 @@
         </a>
     </p>
 </div>
+
 <hr class="border-top mb-4" />
 
-<div class="row g-4">
+@if (User.IsInRole("PRIMARCH"))
+{
+    <h3>Gestão de Unidades </h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <a asp-controller="Soldados" asp-action="Index" class="dashboard-card">
+                <h3>Registro de Astartes</h3>
+                <p>Gerenciar  perfis de Soldados.</p>
+            </a>
+        </div>
 
-    <div class="col-md-4">
-        <a asp-controller="Soldados" asp-action="Index" class="dashboard-card">
-            <h3>Registro de Astartes</h3>
-            <p>Gerenciar, criar e editar perfis de Soldados (Space Marines).</p>
-        </a>
+        <div class="col-md-4">
+            <a asp-controller="Missoes" asp-action="Index" class="dashboard-card">
+                <h3>Gestão de Missões</h3>
+                <p>Gerenciar  missões e participantes.</p>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-controller="Treinamentos" asp-action="Index" class="dashboard-card">
+                <h3>Doutrinação</h3>
+                <p>Gerenciar  sessões de treinamento.</p>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-controller="Ordens" asp-action="Index" class="dashboard-card">
+                <h3>Ordens de Batalha</h3>
+                <p>Gerenciar  ordens diretas.</p>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-controller="ItemBatalhas" asp-action="Index" class="dashboard-card">
+                <h3>Arsenal</h3>
+                <p>Gerenciar  inventário de armas.</p>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-controller="Consulta" asp-action="Index" class="dashboard-card" style="border-color: var(--imperial-gold);">
+                <h3>Central de Consultas</h3>
+                <p>Aceder a todos os Relatórios e Filtros Estratégicos.</p>
+            </a>
+        </div>
+
     </div>
-
-    <div class="col-md-4">
-        <a asp-controller="Missoes" asp-action="Index" class="dashboard-card">
-            <h3>Gestão de Missões</h3>
-            <p>Criar missões e designar múltiplos soldados para operações táticas.</p>
-        </a>
-    </div>
-
-    <div class="col-md-4">
-        <a asp-controller="Treinamentos" asp-action="Index" class="dashboard-card">
-            <h3>Doutrinação</h3>
-            <p>Agendar sessões de treinamento e atribuir participantes.</p>
-        </a>
-    </div>
-
-    <div class="col-md-4">
-        <a asp-controller="Ordens" asp-action="Index" class="dashboard-card">
-            <h3>Ordens de Batalha</h3>
-            <p>Emitir ordens diretas para unidades de Astartes individuais.</p>
-        </a>
-    </div>
-
-    <div class="col-md-4">
-        <a asp-controller="ItemBatalhas" asp-action="Index" class="dashboard-card">
-            <h3>Arsenal</h3>
-            <p>Administrar o inventário de armas e equipamentos de batalha.</p>
-        </a>
-    </div>
-
-    <div class="col-md-4">
-        <a href="#" class="dashboard-card" style="opacity: 0.5; cursor: not-allowed;">
-            <h3>Relatórios (Em Breve)</h3>
-            <p>Analisar estatísticas de desempenho em combate.</p>
-        </a>
-    </div>
-
-</div>
+}

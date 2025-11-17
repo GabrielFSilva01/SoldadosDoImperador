@@ -1,5 +1,5 @@
 :root {
-    /* Cores da Armadura (Sua paleta) */
+    /* Cores da Armadura */
     --ultramarine-blue: #003366;
     --ultramarine-dark: #002244;
     --imperial-gold: #c39a3e;
@@ -12,7 +12,6 @@
 
 /* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
 
-
 html {
     font-size: 16px;
     position: relative;
@@ -20,9 +19,8 @@ html {
 }
 
 body {
-    /* Fonte base (Serifada, estilo "Pergaminho") */
     font-family: 'EB Garamond', serif;
-    margin-bottom: 60px; /* Garante espaço para o footer */
+    margin-bottom: 60px;
 }
 
 /* Títulos, Navbar, Botões (Fonte Imperial) */
@@ -39,12 +37,12 @@ h1, h2, h3, h4, h5,
 
 
 a {
-    color: var(--imperial-gold); /* Links Dourados */
+    color: var(--imperial-gold);
     transition: color 0.2s ease-in-out;
 }
 
     a:hover, .nav-link:hover {
-        color: var(--focus-red) !important; 
+        color: var(--focus-red) !important;
     }
 
 /* Botão Primário (Salvar, Criar) */
@@ -94,8 +92,6 @@ a {
     }
 
 /* --- TEMA GLOBAL --- */
-/* (Requer a classe 'theme-ultramarine' no <body> do _Layout.cshtml) */
-
 .theme-ultramarine {
     background-color: var(--ultramarine-dark);
     color: var(--text-light);
@@ -137,7 +133,6 @@ a {
     }
 
 
-/* --- PERFIL DE SOLDADO (Mantido) --- */
 
 .soldado-profile {
     background-color: #1f2732;
@@ -160,9 +155,8 @@ a {
     .soldado-profile .list-group-item {
         background-color: #262c35 !important;
         border-color: #3f526b !important;
+        color: var(--text-light) !important;
     }
-
-/* --- PAINEL DE COMANDO (Home Page) --- */
 
 
 .controller-home .container {
@@ -202,9 +196,6 @@ a {
         color: var(--text-light);
     }
 
-
-/* --- CLASSES DE LAYOUT PADRÃO (Ajustadas) --- */
-
 .border-top {
     border-top: 1px solid var(--ultramarine-blue) !important;
 }
@@ -231,34 +222,28 @@ button.accept-policy {
 }
 
 
-
-/* 1. Força o texto de formulários e texto normal (não-link) a ser claro */
 .theme-ultramarine .form-group label,
 .theme-ultramarine .table tbody td,
 .theme-ultramarine .table thead th,
 .theme-ultramarine dl dt,
 .theme-ultramarine dl dd,
-.theme-ultramarine .text-dark { 
+.theme-ultramarine .text-dark {
     color: var(--text-light) !important;
 }
 
-/* 2. Força os inputs de formulário a terem texto claro */
 .theme-ultramarine .form-control {
     background-color: var(--input-background) !important;
     border-color: var(--ultramarine-blue) !important;
-    color: var(--text-light) !important; /* Texto DENTRO do input */
+    color: var(--text-light) !important;
 }
-
-/* 3. Força os LINKS (Edit/Details/Delete) a serem dourados */
 
 .theme-ultramarine .table td a,
 .theme-ultramarine dl dd a,
-.theme-ultramarine .container .btn-link { /* Links que parecem botões */
+.theme-ultramarine .container .btn-link {
     color: var(--imperial-gold) !important;
     text-decoration: underline;
 }
 
-    /* 4. Força o Hover (Vermelho) */
     .theme-ultramarine .table td a:hover,
     .theme-ultramarine dl dd a:hover,
     .theme-ultramarine .container .btn-link:hover {

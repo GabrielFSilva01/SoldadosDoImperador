@@ -8,7 +8,6 @@ namespace SoldadosDoImperador.Data
     // O Contexto Mestre: herda de IdentityDbContext<ApplicationUser> E tem seus DbSets
     public class ContextoWarhammer : IdentityDbContext<ApplicationUser>
     {
-        // Seus DbSets de Entidade (5)
         public DbSet<Soldado> Soldados { get; set; }
         public DbSet<Missao> Missoes { get; set; }
         public DbSet<ItemBatalha> ItensBatalha { get; set; }
