@@ -47,17 +47,15 @@ namespace SoldadosDoImperador.Models
         [Display(Name = "Prazo Final")]
         public DateTime PrazoFinal { get; set; }
 
-        // --- Chave Estrangeira e Propriedade de Navegação ---
-
+      
         // 7. Chave Estrangeira (O Alvo da Ordem)
-        // [Range] é a validação correta para FKs de dropdown.
+
         [Range(1, int.MaxValue, ErrorMessage = "O campo Soldado Alvo é obrigatório.")]
         [Display(Name = "Soldado Alvo")]
         public int SoldadoId { get; set; }
 
         // 8. Propriedade de Navegação
-        // --- CORREÇÃO APLICADA AQUI ---
-        // O [Required] foi REMOVIDO desta propriedade de navegação.
+    
         [ForeignKey(nameof(SoldadoId))]
         public Soldado Soldado { get; set; } = null!;
     }
