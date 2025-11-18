@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic; // Necessário para ICollection
+using System.Collections.Generic; 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,8 +29,7 @@ namespace SoldadosDoImperador.Models
         [Display(Name = "Data da Sessão")]
         public DateTime DataRealizacao { get; set; }
 
-        // --- CORREÇÃO APLICADA AQUI ---
-        // A coleção agora é inicializada, prevenindo a NullReferenceException.
+   
         public ICollection<TreinamentoParticipante> Participantes { get; set; } = new List<TreinamentoParticipante>();
     }
 }
