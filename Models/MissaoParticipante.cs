@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SoldadosDoImperador.Models
 {
-    // Esta é a nossa tabela de junção
+
     public class MissaoParticipante
     {
         // --- Chave Estrangeira para Missao ---
